@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.devPontes.study.entities.Category;
 import com.devPontes.study.entities.Order;
+import com.devPontes.study.entities.OrderItem;
 import com.devPontes.study.entities.Product;
 import com.devPontes.study.entities.User;
 import com.devPontes.study.entities.enums.OrderStatus;
 import com.devPontes.study.repositories.CategoryRepository;
+import com.devPontes.study.repositories.OrderItemRepository;
 import com.devPontes.study.repositories.OrderRepository;
 import com.devPontes.study.repositories.ProductRepository;
 import com.devPontes.study.repositories.UserRepository;
@@ -34,6 +36,9 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private ProductRepository productRepository;
 
+	@Autowired
+	OrderItemRepository orderItemRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		Category cat1 = new Category(null, "Electronics");
@@ -68,7 +73,11 @@ public class TestConfig implements CommandLineRunner {
 		Order o2 = new Order(null, Instant.parse("2024-01-21T03:42:10Z"), OrderStatus.DELIVERED, u1);
 		Order o3 = new Order(null, Instant.parse("2024-01-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, u2);
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
-
+		
+		OrderItem orderItem1 = new OrderItem(o1, p2, 2, p1.getPrice());
+		OrderItem orderItem2 = new OrderItem(o2, p2, 9, p2.getPrice());	
+		OrderItem orderItem3 = new OrderItem(o3, p5, 2, p5.getPrice());	
+		orderItemRepository.saveAll(Arrays.asList(orderItem1, orderItem2, orderItem3));
 	}
 
 }

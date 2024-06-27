@@ -2,10 +2,13 @@ package com.devPontes.study.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.devPontes.study.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,10 +33,15 @@ public class Order implements Serializable{
 	
 	private Integer orderStatus;
 
-
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
+	
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> itensPedido = new HashSet<>();
+	
 
 	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		this.id = id;
@@ -78,6 +87,14 @@ public class Order implements Serializable{
 	   if(orderStatus != null) {
 			this.orderStatus = orderStatus.getCode();
 	   }
+	}
+
+	public Set<OrderItem> getItensPedido() {
+		return itensPedido;
+	}
+
+	public void setItensPedido(Set<OrderItem> itensPedido) {
+		this.itensPedido = itensPedido;
 	}
 
 	@Override
